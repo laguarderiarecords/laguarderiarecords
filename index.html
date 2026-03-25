@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Guardería Records · Sistema Interno</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --negro: #0e0e0e;
+    --g900: #141414;
+    --g800: #1e1e1e;
+    --g700: #2a2a2a;
+    --g600: #383838;
+    --g400: #666;
+    --g300: #999;
+    --crema: #f2e8d9;
+    --crema2: #e6d9c6;
+    --naranja: #ff5a1a;
+    --naranja2: #cc3f00;
+    --verde: #2ecc71;
+    --rojo: #e74c3c;
+    --amarillo: #f0b429;
+    --azul: #3d8bff;
+    --blanco: #faf6f0;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--negro);
+    color: var(--crema);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+
+  /* grain */
+  body::after {
+    content: '';
+    position: fixed; inset: 0; pointer-events: none; z-index: 9999;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity: .5;
+  }
+
+  /* ── TOPBAR ── */
+  .topbar {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(14,14,14,.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--g700);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 2.5rem;
+    height: 56px;
+  }
+  .brand {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: .08em;
+    color: var(--crema);
+  }
+  .brand em { color: var(--naranja); font-style: normal; }
+  .topbar-right {
+    display: flex; align-items: center; gap: 1.5rem;
+  }
+  .pulse {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--verde);
+    box-shadow: 0 0 0 0 rgba(46,204,113,.4);
+    animation: sonar 2s ease-out infinite;
+  }
+  @keyframes sonar {
+    0%   { box-shadow: 0 0 0 0 rgba(46,204,113,.4); }
+    70%  { box-shadow: 0 0 0 8px rgba(46,204,113,0); }
+    100% { box-shadow: 0 0 0 0 rgba(46,204,113,0); }
+  }
+  .topbar-meta {
+    font-family: 'Space Mono', monospace;
+    font-size: .6rem;
+    color: var(--g400);
+    letter-spacing: .1em;
+    text-align: right;
+    line-height: 1.6;
+  }
+
+  /* ── LAYOUT ── */
+  .page { max-width: 1280px; margin: 0 auto; padding: 2rem 2.5rem 4rem; }
+
+  /* ── HERO ── */
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    padding-bottom: 1.5rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--g700);
+    position: relative;
+    animation: fadeUp .5s ease both;
+  }
+  .hero::after {
+    content: '';
+    position: absolute; bottom: -1px; left: 0;
+    width: 60px; height: 2px;
+    background: var(--naranja);
+  }
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.4rem, 4.5vw, 3.8rem);
+    letter-spacing: .06em;
+    line-height: .95;
+    color: var(--blanco);
+  }
+  .hero-title span { color: var(--naranja); }
+  .hero-sub {
+    font-family: 'Space Mono', monospace;
+    font-size: .6rem;
+    letter-spacing: .22em;
+    color: var(--g400);
+    text-transform: uppercase;
+    margin-top: .5rem;
+  }
+  .hero-date {
+    font-family: 'Space Mono', monospace;
+    font-size: .65rem;
+    color: var(--g400);
+    text-align: right;
+    line-height: 1.8;
+  }
+
+  /* ── SECTION LABEL ── */
+  .sec-label {
+    font-family: 'Space Mono', monospace;
+    font-size: .58rem;
+    letter-spacing: .22em;
+    color: var(--naranja);
+    text-transform: uppercase;
+    display: flex; align-items: center; gap: .8rem;
+    margin-bottom: .9rem;
+  }
+  .sec-label::after { content: ''; flex:1; height:1px; background: var(--g700); }
+
+  /* ── KPI STRIP ── */
+  .kpi-strip {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    border: 1px solid var(--g700);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+    animation: fadeUp .5s ease .08s both;
+  }
+  @media (max-width: 900px) { .kpi-strip { grid-template-columns: repeat(3,1fr); } }
+
+  .kpi {
+    background: var(--g900);
+    padding: 1.2rem 1.3rem;
+    border-right: 1px solid var(--g700);
+    transition: background .18s;
+    cursor: default;
+  }
+  .kpi:last-child { border-right: none; }
+  .kpi:hover { background: var(--g800); }
+  .kpi-lbl {
+    font-family: 'Space Mono', monospace;
+    font-size: .56rem;
+    letter-spacing: .14em;
+    color: var(--g400);
+    text-transform: uppercase;
+    margin-bottom: .35rem;
+  }
+  .kpi-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    line-height: 1;
+    color: var(--crema);
+  }
+  .kpi-val.orange { color: var(--naranja); }
+  .kpi-val.green  { color: var(--verde); }
+  .kpi-val.red    { color: var(--rojo); }
+  .kpi-hint { font-size: .66rem; color: var(--g400); margin-top: .2rem; }
+  .kpi-loading { opacity: .3; font-size: .7rem; font-family: 'Space Mono',monospace; }
+
+  /* ── TWO-COL ── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    animation: fadeUp .5s ease .16s both;
+  }
+  @media (max-width: 1000px) { .two-col { grid-template-columns: 1fr; } }
+
+  /* ── EVENTS TABLE ── */
+  .card {
+    background: var(--g900);
+    border: 1px solid var(--g700);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .card-head {
+    background: var(--g800);
+    border-bottom: 1px solid var(--g700);
+    padding: .7rem 1.2rem;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .card-head-title {
+    font-family: 'Space Mono', monospace;
+    font-size: .6rem;
+    letter-spacing: .15em;
+    color: var(--g300);
+    text-transform: uppercase;
+  }
+  .card-head-link {
+    font-family: 'Space Mono', monospace;
+    font-size: .58rem;
+    color: var(--naranja);
+    text-decoration: none;
+    letter-spacing: .1em;
+    opacity: .7;
+    transition: opacity .15s;
+  }
+  .card-head-link:hover { opacity: 1; }
+
+  .ev-table { width: 100%; border-collapse: collapse; }
+  .ev-table th {
+    font-family: 'Space Mono', monospace;
+    font-size: .55rem;
+    letter-spacing: .12em;
+    color: var(--g400);
+    text-transform: uppercase;
+    padding: .55rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--g700);
+    background: var(--g800);
+  }
+  .ev-table td {
+    padding: .7rem 1rem;
+    font-size: .78rem;
+    border-bottom: 1px solid var(--g800);
+    color: var(--crema2);
+    vertical-align: middle;
+  }
+  .ev-table tr:last-child td { border-bottom: none; }
+  .ev-table tr { transition: background .12s; }
+  .ev-table tr:hover td { background: var(--g800); }
+  .ev-name { font-weight: 600; color: var(--blanco); }
+  .ev-org { font-size: .65rem; color: var(--g400); margin-top: .1rem; }
+  .mono { font-family: 'Space Mono', monospace; font-size: .7rem; }
+
+  .badge {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: .52rem;
+    letter-spacing: .07em;
+    padding: .18rem .5rem;
+    border-radius: 2px;
+    font-weight: 700;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .b-conf  { background: #0f2b1a; color: var(--verde); }
+  .b-plan  { background: #2e2100; color: var(--amarillo); }
+  .b-prosp { background: #0d1e38; color: var(--azul); }
+  .b-free  { background: #1a1a2e; color: #a78bfa; }
+
+  /* ── AGENDA LATERAL ── */
+  .agenda-list { padding: .5rem 0; }
+  .agenda-item {
+    display: flex; gap: .9rem; align-items: flex-start;
+    padding: .65rem 1.2rem;
+    border-bottom: 1px solid var(--g800);
+    transition: background .12s;
+    cursor: default;
+  }
+  .agenda-item:last-child { border-bottom: none; }
+  .agenda-item:hover { background: var(--g800); }
+  .agenda-date {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    line-height: 1;
+    color: var(--naranja);
+    min-width: 28px;
+    text-align: center;
+  }
+  .agenda-date-month {
+    font-family: 'Space Mono', monospace;
+    font-size: .5rem;
+    letter-spacing: .1em;
+    color: var(--g400);
+    text-align: center;
+    text-transform: uppercase;
+  }
+  .agenda-info {}
+  .agenda-name { font-size: .78rem; font-weight: 600; color: var(--blanco); }
+  .agenda-meta { font-size: .65rem; color: var(--g400); margin-top: .1rem; }
+
+  /* ── NAV GRID ── */
+  .nav-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+    gap: .9rem;
+    animation: fadeUp .5s ease .24s both;
+  }
+
+  .nav-card {
+    background: var(--g900);
+    border: 1px solid var(--g700);
+    border-radius: 4px;
+    padding: 1.3rem 1.2rem;
+    text-decoration: none;
+    display: flex; flex-direction: column; gap: .55rem;
+    position: relative; overflow: hidden;
+    transition: border-color .2s, transform .15s, box-shadow .2s;
+  }
+  .nav-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 2px; background: var(--naranja);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform .22s ease;
+  }
+  .nav-card:hover {
+    border-color: var(--naranja);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255,90,26,.1);
+  }
+  .nav-card:hover::before { transform: scaleX(1); }
+  .nav-icon { font-size: 1.4rem; }
+  .nav-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: .04em;
+    color: var(--blanco);
+  }
+  .nav-desc { font-size: .68rem; color: var(--g400); line-height: 1.45; }
+  .nav-chip {
+    display: inline-block; margin-top: auto;
+    font-family: 'Space Mono', monospace;
+    font-size: .5rem; letter-spacing: .1em;
+    padding: .18rem .5rem; border-radius: 2px;
+    background: var(--g700); color: var(--g400);
+    text-transform: uppercase;
+    align-self: flex-start;
+  }
+  .nav-chip.hot { background: #2a1200; color: var(--naranja); }
+  .nav-chip.live { background: #0a2016; color: var(--verde); }
+
+  /* ── FOOTER ── */
+  .footer {
+    margin-top: 3rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid var(--g700);
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'Space Mono', monospace;
+    font-size: .58rem;
+    color: var(--g400);
+    letter-spacing: .08em;
+  }
+
+  /* ── LOADING SKELETON ── */
+  .skel {
+    display: inline-block;
+    width: 60px; height: 10px;
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--g700) 25%, var(--g600) 50%, var(--g700) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s infinite;
+    vertical-align: middle;
+  }
+  @keyframes shimmer { to { background-position: -200% 0; } }
+
+  /* ── ANIMS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── ERROR BANNER ── */
+  .error-banner {
+    background: #2a0a0a; border: 1px solid var(--rojo);
+    border-radius: 4px; padding: .8rem 1.2rem;
+    font-size: .75rem; color: #ff9999;
+    margin-bottom: 1rem; display: none;
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">La Guarde<em>ría</em> Records</div>
+  <div class="topbar-right">
+    <div class="pulse"></div>
+    <div class="topbar-meta">
+      CEO: Luis Mario Vargas<br>
+      COO: Daniela Peña Flores
+    </div>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div>
+      <div class="hero-title">Sistema<br><span>Operativo</span></div>
+      <div class="hero-sub">La Guardería Records &nbsp;·&nbsp; Querétaro, MX</div>
+    </div>
+    <div class="hero-date" id="live-date"></div>
+  </div>
+
+  <div class="error-banner" id="error-banner">
+    ⚠️ No se pudieron cargar datos en vivo del Sheet. Verifica que el archivo esté compartido como "Cualquier persona con el link puede ver". Los links de navegación siguen funcionando.
+  </div>
+
+  <!-- KPIs -->
+  <div class="sec-label">Estado general</div>
+  <div class="kpi-strip">
+    <div class="kpi">
+      <div class="kpi-lbl">Eventos 2026</div>
+      <div class="kpi-val orange" id="kpi-total"><span class="skel"></span></div>
+      <div class="kpi-hint">confirmados + planeación</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-lbl">Próximo show</div>
+      <div class="kpi-val" id="kpi-next" style="font-size:1.1rem;padding-top:.4rem"><span class="skel" style="width:100px"></span></div>
+      <div class="kpi-hint" id="kpi-next-date"></div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-lbl">Ingresos proyect.</div>
+      <div class="kpi-val green" id="kpi-ingresos"><span class="skel"></span></div>
+      <div class="kpi-hint">desde hoja EVENTOS</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-lbl">Gastos proyect.</div>
+      <div class="kpi-val red" id="kpi-gastos"><span class="skel"></span></div>
+      <div class="kpi-hint">desde hoja EVENTOS</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-lbl">Utilidad proyect.</div>
+      <div class="kpi-val" id="kpi-utilidad"><span class="skel"></span></div>
+      <div class="kpi-hint">ingresos − gastos</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-lbl">Shows totales agenda</div>
+      <div class="kpi-val orange">14</div>
+      <div class="kpi-hint">abr – oct 2026</div>
+    </div>
+  </div>
+
+  <!-- MAIN TWO-COL -->
+  <div class="two-col">
+
+    <!-- Tabla eventos -->
+    <div>
+      <div class="sec-label">Próximos eventos</div>
+      <div class="card">
+        <div class="card-head">
+          <span class="card-head-title">Hoja maestra EVENTOS</span>
+          <a class="card-head-link" href="https://docs.google.com/spreadsheets/d/1nIjczvzycRjWZH3vNILo6cYQuRKo17QJ/edit?gid=14133420#gid=14133420" target="_blank">ABRIR SHEET ↗</a>
+        </div>
+        <table class="ev-table">
+          <thead>
+            <tr>
+              <th>Evento</th>
+              <th>Fecha</th>
+              <th>Horario</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody id="ev-tbody">
+            <tr><td colspan="4" style="text-align:center;padding:2rem;color:var(--g400)"><span class="skel" style="width:200px"></span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Agenda lateral -->
+    <div>
+      <div class="sec-label">Agenda 2026</div>
+      <div class="card">
+        <div class="card-head">
+          <span class="card-head-title">Todos los shows</span>
+          <a class="card-head-link" href="https://calendar.google.com/calendar/u/1?cid=Y29udGFjdG9AbGFndWFyZGVyaWFyZWNvcmRzLmNvbQ" target="_blank">CALENDAR ↗</a>
+        </div>
+        <div class="agenda-list" id="agenda-list"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- NAV -->
+  <div class="sec-label">Módulos del sistema</div>
+  <div class="nav-grid">
+    <a class="nav-card" href="https://docs.google.com/spreadsheets/d/1nIjczvzycRjWZH3vNILo6cYQuRKo17QJ/edit?gid=1024226207#gid=1024226207" target="_blank">
+      <span class="nav-icon">📊</span>
+      <span class="nav-name">Dashboard</span>
+      <span class="nav-desc">Resumen ejecutivo con KPIs automáticos de todos los módulos.</span>
+      <span class="nav-chip hot">Inicio</span>
+    </a>
+    <a class="nav-card" href="https://docs.google.com/spreadsheets/d/1nIjczvzycRjWZH3vNILo6cYQuRKo17QJ/edit?gid=14133420#gid=14133420" target="_blank">
+      <span class="nav-icon">🎸</span>
+      <span class="nav-name">Eventos</span>
+      <span class="nav-desc">Hoja maestra: shows, fechas, venues, ingresos y utilidad por evento.</span>
+      <span class="nav-chip hot">Hoja principal</span>
+    </a>
+    <a class="nav-card" href="https://docs.google.com/spreadsheets/d/1nIjczvzycRjWZH3vNILo6cYQuRKo17QJ/edit?gid=1669943052#gid=1669943052" target="_blank">
+      <span class="nav-icon">📋</span>
+      <span class="nav-name">Corrida de Gastos</span>
+      <span class="nav-desc">Presupuesto por evento: flete, hospedaje, backline, diseño, catering. Break-even auto.</span>
+      <span class="nav-chip">1 copia x show</span>
+    </a>
+    <a class="nav-card" href="https://docs.google.com/spreadsheets/d/1nIjczvzycRjWZH3vNILo6cYQuRKo17QJ/edit?gid=1734967264#gid=1734967264" target="_blank">
+      <span class="nav-icon">🎛️</span>
+      <span class="nav-name">Backline</span>
+      <span class="nav-desc">Inventario: Tóttem, Casa Fantasma, Alpha Dog, La Nostalgia + equipo propio.</span>
+      <span class="nav-chip live">15 equipos</span>
+    </a>
+    <a class="nav-card" href="https://docs.google.com/spreadsheets/d/1nIjczvzycRjWZH3vNILo6cYQuRKo17QJ/edit?gid=78456339#gid=78456339" target="_blank">
+      <span class="nav-icon">🎤</span>
+      <span class="nav-name">Bandas / CRM</span>
+      <span class="nav-desc">Directorio de artistas, fees, estado de relación e historial de shows juntos.</span>
+      <span class="nav-chip live">10 bandas</span>
+    </a>
+    <a class="nav-card" href="https://docs.google.com/spreadsheets/d/1nIjczvzycRjWZH3vNILo6cYQuRKo17QJ/edit?gid=1891961452#gid=1891961452" target="_blank">
+      <span class="nav-icon">🔧</span>
+      <span class="nav-name">Proveedores</span>
+      <span class="nav-desc">Fletes (Diego, Oscar), hospedaje (Irán), catering (Rafa Torei), diseño, prensa.</span>
+      <span class="nav-chip">18 contactos</span>
+    </a>
+    <a class="nav-card" href="https://docs.google.com/spreadsheets/d/1nIjczvzycRjWZH3vNILo6cYQuRKo17QJ/edit?gid=791197186#gid=791197186" target="_blank">
+      <span class="nav-icon">💰</span>
+      <span class="nav-name">Finanzas</span>
+      <span class="nav-desc">Registro de ingresos y gastos. Balance acumulado automático por movimiento.</span>
+      <span class="nav-chip">Registro continuo</span>
+    </a>
+    <a class="nav-card" href="https://calendar.google.com/calendar/u/1?cid=Y29udGFjdG9AbGFndWFyZGVyaWFyZWNvcmRzLmNvbQ" target="_blank">
+      <span class="nav-icon">📅</span>
+      <span class="nav-name">Calendario</span>
+      <span class="nav-desc">Shows confirmados, fechas de producción, deadlines de prensa y pagos.</span>
+      <span class="nav-chip">Google Calendar</span>
+    </a>
+    <a class="nav-card" href="https://drive.google.com/drive/folders/1AqIry21M-9go6cGe6R8VhB1FmwDP5dr8" target="_blank">
+      <span class="nav-icon">📁</span>
+      <span class="nav-name">Drive</span>
+      <span class="nav-desc">Carpetas por evento: presupuesto, contrato, cartel, rider, logística.</span>
+      <span class="nav-chip">Google Drive</span>
+    </a>
+  </div>
+
+  <div class="footer">
+    <span>La Guardería Records · Sistema v1.0 · Querétaro 2026</span>
+    <span id="last-updated">Actualizando datos…</span>
+  </div>
+
+</div>
+
+<script>
+// ── CONFIG ───────────────────────────────────────────────────────────────────
+const SHEET_ID = '1nIjczvzycRjWZH3vNILo6cYQuRKo17QJ';
+
+// Rangos de la hoja EVENTOS (gid 14133420) — ajusta si cambian filas
+// Columnas: B=Evento, C=Fecha, D=Venue, F=Responsable, G=Estado, M=Ingresos, N=Gastos, O=Utilidad
+const EVENTS_RANGE = encodeURIComponent('🎸 EVENTOS!A4:P20');
+const FINANCE_RANGE = encodeURIComponent('🎸 EVENTOS!M4:O20');
+
+// ── AGENDA (hardcoded desde tu lista, siempre disponible) ───────────────────
+const AGENDA = [
+  { d:11, m:'ABR', name:'Chill & Go',            org:'La Guardería Records', hora:'16:00–23:00', libre:false },
+  { d:17, m:'ABR', name:'Evento WeFort',          org:'',                    hora:'18:00–23:00', libre:false },
+  { d:18, m:'ABR', name:'Evento Reggae',          org:'La Guardería Records', hora:'16:00–23:00', libre:false },
+  { d:25, m:'ABR', name:'Los Vaguens en Qro',     org:'La Guardería Records', hora:'16:00–23:00', libre:false },
+  { d:26, m:'ABR', name:'Kid Manny',              org:'La Guardería Records', hora:'16:00–23:00', libre:false },
+  { d: 1, m:'MAY', name:'Plutonio de Alto Grado', org:'La Guardería Records', hora:'16:00–23:00', libre:false },
+  { d: 2, m:'MAY', name:'Kaoz Leal',              org:'',                    hora:'19:30',        libre:false },
+  { d: 9, m:'MAY', name:'Ruido en Casa (La Bestia Radio)', org:'',           hora:'16:00–23:00', libre:true  },
+  { d:23, m:'MAY', name:'Gris Romero en Qro',     org:'',                    hora:'16:00–23:00', libre:false },
+  { d: 5, m:'JUN', name:'Lío Petricolor en Qro',  org:'La Guardería Records', hora:'16:00–23:00', libre:false },
+  { d: 8, m:'AGO', name:'Urifest',                org:'Pulquería El Borrego', hora:'',            libre:false },
+  { d: 4, m:'SEP', name:'Psyched! Fest Qro',      org:'MACQ',                hora:'',            libre:false },
+  { d: 5, m:'SEP', name:'GRTSCH en Qro',          org:'La Guardería Records', hora:'16:00–23:00', libre:false },
+  { d:31, m:'OCT', name:'Unperro Andaluz y Ven y Mira', org:'MCQRO',        hora:'',            libre:false },
+];
+
+// ── LIVE DATE ────────────────────────────────────────────────────────────────
+function updateDate() {
+  const now = new Date();
+  const opts = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
+  document.getElementById('live-date').innerHTML =
+    now.toLocaleDateString('es-MX', opts).replace(/^\w/, c => c.toUpperCase()) +
+    '<br><span style="color:var(--g400)">' +
+    now.toLocaleTimeString('es-MX', { hour:'2-digit', minute:'2-digit' }) + ' hrs</span>';
+}
+updateDate();
+setInterval(updateDate, 60000);
+
+// ── RENDER AGENDA ─────────────────────────────────────────────────────────────
+function renderAgenda() {
+  const el = document.getElementById('agenda-list');
+  el.innerHTML = AGENDA.map(e => `
+    <div class="agenda-item">
+      <div>
+        <div class="agenda-date">${e.d}</div>
+        <div class="agenda-date-month">${e.m}</div>
+      </div>
+      <div class="agenda-info">
+        <div class="agenda-name">${e.name}${e.libre ? ' <span style="font-size:.55rem;background:#1a1a2e;color:#a78bfa;padding:.1rem .35rem;border-radius:2px;font-family:\'Space Mono\',monospace;letter-spacing:.07em">FREE</span>' : ''}</div>
+        <div class="agenda-meta">${e.org ? e.org + ' · ' : ''}${e.hora}</div>
+      </div>
+    </div>
+  `).join('');
+}
+renderAgenda();
+
+// ── FETCH SHEETS DATA ─────────────────────────────────────────────────────────
+async function fetchRange(range) {
+  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&range=${range}`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('fetch failed');
+  const text = await res.text();
+  // Strip Google's JSONP wrapper
+  const json = JSON.parse(text.substring(text.indexOf('{'), text.lastIndexOf('}') + 1));
+  return json.table;
+}
+
+function fmtMXN(val) {
+  if (!val && val !== 0) return '—';
+  return '$' + Number(val).toLocaleString('es-MX', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+}
+
+function badgeHtml(estado) {
+  if (!estado) return '';
+  const s = String(estado).toUpperCase();
+  if (s.includes('CONFIRM'))  return `<span class="badge b-conf">Confirmado</span>`;
+  if (s.includes('PLANEAC'))  return `<span class="badge b-plan">En planeación</span>`;
+  if (s.includes('PROSPECTO'))return `<span class="badge b-prosp">Prospecto</span>`;
+  return `<span class="badge b-prosp">${estado}</span>`;
+}
+
+function cellVal(row, idx) {
+  try { return row.c[idx] && row.c[idx].v != null ? row.c[idx].v : null; } catch { return null; }
+}
+
+function fmtDate(v) {
+  if (!v) return '';
+  // Google Sheets dates come as "Date(yyyy,m,d)"
+  if (typeof v === 'string' && v.startsWith('Date(')) {
+    const parts = v.slice(5, -1).split(',').map(Number);
+    const d = new Date(parts[0], parts[1], parts[2]);
+    return d.toLocaleDateString('es-MX', { day:'2-digit', month:'short', year:'numeric' });
+  }
+  return String(v);
+}
+
+async function loadSheetData() {
+  try {
+    const table = await fetchRange(EVENTS_RANGE);
+    const rows = (table.rows || []).filter(r => r.c && cellVal(r,1)); // col B = Evento
+
+    // KPIs from sheet
+    let totalIngresos = 0, totalGastos = 0;
+    let confirmedCount = 0;
+
+    const evRows = rows.map(r => {
+      const evento   = cellVal(r, 1);  // B
+      const fecha    = cellVal(r, 2);  // C
+      const venue    = cellVal(r, 3);  // D
+      const estado   = cellVal(r, 6);  // G
+      const ingresos = cellVal(r, 12); // M
+      const gastos   = cellVal(r, 13); // N
+
+      if (ingresos) totalIngresos += Number(ingresos);
+      if (gastos)   totalGastos   += Number(gastos);
+      const st = String(estado || '').toUpperCase();
+      if (st.includes('CONFIRM') || st.includes('PLANEAC')) confirmedCount++;
+
+      return { evento, fecha, venue, estado, ingresos, gastos };
+    }).filter(r => r.evento);
+
+    // Render KPIs
+    document.getElementById('kpi-total').textContent = confirmedCount || AGENDA.length;
+    document.getElementById('kpi-ingresos').textContent = totalIngresos ? fmtMXN(totalIngresos) : '—';
+    document.getElementById('kpi-gastos').textContent   = totalGastos   ? fmtMXN(totalGastos)   : '—';
+    const util = totalIngresos - totalGastos;
+    const utilEl = document.getElementById('kpi-utilidad');
+    utilEl.textContent = (totalIngresos || totalGastos) ? fmtMXN(util) : '—';
+    utilEl.className = 'kpi-val ' + (util >= 0 ? 'green' : 'red');
+
+    // Next show KPI
+    document.getElementById('kpi-next').textContent = AGENDA[0].name;
+    document.getElementById('kpi-next-date').textContent = `${AGENDA[0].d} ${AGENDA[0].m} · ${AGENDA[0].hora}`;
+
+    // Render events table
+    const tbody = document.getElementById('ev-tbody');
+    if (evRows.length === 0) {
+      // Fall back to agenda
+      tbody.innerHTML = AGENDA.slice(0, 6).map(e => `
+        <tr>
+          <td><div class="ev-name">${e.name}</div><div class="ev-org">${e.org}</div></td>
+          <td class="mono">${e.d} ${e.m} 2026</td>
+          <td class="mono">${e.hora}</td>
+          <td>${e.libre ? '<span class="badge b-free">Gratuito</span>' : '<span class="badge b-conf">Confirmado</span>'}</td>
+        </tr>
+      `).join('');
+    } else {
+      tbody.innerHTML = evRows.map(r => `
+        <tr>
+          <td><div class="ev-name">${r.evento}</div></td>
+          <td class="mono">${fmtDate(r.fecha)}</td>
+          <td>${r.venue || '—'}</td>
+          <td>${badgeHtml(r.estado)}</td>
+        </tr>
+      `).join('');
+    }
+
+    document.getElementById('last-updated').textContent =
+      'Datos actualizados · ' + new Date().toLocaleTimeString('es-MX', {hour:'2-digit',minute:'2-digit'});
+
+  } catch(e) {
+    console.warn('Sheets API error:', e);
+    document.getElementById('error-banner').style.display = 'block';
+
+    // Graceful fallback — render agenda data
+    document.getElementById('kpi-total').textContent = AGENDA.length;
+    document.getElementById('kpi-next').textContent = AGENDA[0].name;
+    document.getElementById('kpi-next-date').textContent = `${AGENDA[0].d} ${AGENDA[0].m} · ${AGENDA[0].hora}`;
+    document.getElementById('kpi-ingresos').textContent = '—';
+    document.getElementById('kpi-gastos').textContent = '—';
+    document.getElementById('kpi-utilidad').textContent = '—';
+
+    const tbody = document.getElementById('ev-tbody');
+    tbody.innerHTML = AGENDA.slice(0, 8).map(e => `
+      <tr>
+        <td><div class="ev-name">${e.name}</div><div class="ev-org">${e.org}</div></td>
+        <td class="mono">${e.d} ${e.m} 2026</td>
+        <td class="mono">${e.hora}</td>
+        <td>${e.libre ? '<span class="badge b-free">Gratuito</span>' : '<span class="badge b-conf">Confirmado</span>'}</td>
+      </tr>
+    `).join('');
+
+    document.getElementById('last-updated').textContent = 'Sin conexión al Sheet';
+  }
+}
+
+loadSheetData();
+// Refresca cada 5 minutos
+setInterval(loadSheetData, 5 * 60 * 1000);
+</script>
+</body>
+</html>
