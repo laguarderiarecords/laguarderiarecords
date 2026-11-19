@@ -3,752 +3,551 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>La Guardería Records · Sistema Interno</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#151311">
+<title>LGR · Sistema operativo</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23FF5A1A'/%3E%3Ctext x='16' y='23' font-family='Arial Black,Arial' font-weight='900' font-size='18' text-anchor='middle' fill='%23151311'%3EG%3C/text%3E%3C/svg%3E">
+<link rel="preload" href="fonts/big-shoulders-stencil-display-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
 <style>
+  /* ── Tipografías (auto-hospedadas, licencia OFL en /fonts) ── */
+  @font-face { font-family: 'BS Stencil'; src: url('fonts/big-shoulders-stencil-display-latin-800-normal.woff2') format('woff2'); font-weight: 800; font-display: swap; }
+  @font-face { font-family: 'BS Display'; src: url('fonts/big-shoulders-display-latin-600-normal.woff2') format('woff2'); font-weight: 600; font-display: swap; }
+  @font-face { font-family: 'BS Display'; src: url('fonts/big-shoulders-display-latin-800-normal.woff2') format('woff2'); font-weight: 800; font-display: swap; }
+  @font-face { font-family: 'Archivo'; src: url('fonts/archivo-latin-400-normal.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+  @font-face { font-family: 'Archivo'; src: url('fonts/archivo-latin-600-normal.woff2') format('woff2'); font-weight: 600 700; font-display: swap; }
+
   :root {
-    --negro: #0e0e0e;
-    --g900: #141414;
-    --g800: #1e1e1e;
-    --g700: #2a2a2a;
-    --g600: #383838;
-    --g400: #666;
-    --g300: #999;
-    --crema: #f2e8d9;
-    --crema2: #e6d9c6;
-    --naranja: #ff5a1a;
-    --naranja2: #cc3f00;
-    --verde: #2ecc71;
-    --rojo: #e74c3c;
-    --amarillo: #f0b429;
-    --azul: #3d8bff;
-    --blanco: #faf6f0;
+    --escenario: #151311;   /* fondo: escenario apagado */
+    --tarima:    #1E1B18;   /* superficies */
+    --cable:     #2E2A25;   /* líneas */
+    --tinta:     #F1EBDF;   /* texto */
+    --humo:      #A39A8C;   /* texto secundario */
+    --cinta:     #E6D8B8;   /* cinta de papel para rotular cajas */
+    --cinta-ink: #2A2219;
+    --naranja:   #FF5A1A;   /* naranja LGR */
+    --verde:     #4BD38A;
+    --ambar:     #F2C14E;
+
+    --f-stencil: 'BS Stencil', 'BS Display', Impact, 'Arial Narrow', sans-serif;
+    --f-display: 'BS Display', Impact, 'Arial Narrow', sans-serif;
+    --f-body: 'Archivo', system-ui, -apple-system, 'Segoe UI', sans-serif;
   }
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  html { scroll-behavior: smooth; }
-
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; }
   body {
-    background: var(--negro);
-    color: var(--crema);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    line-height: 1.5;
-    min-height: 100vh;
-  }
-
-  /* grain */
-  body::after {
-    content: '';
-    position: fixed; inset: 0; pointer-events: none; z-index: 9999;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-    opacity: .5;
-  }
-
-  /* ── TOPBAR ── */
-  .topbar {
-    position: sticky; top: 0; z-index: 100;
-    background: rgba(14,14,14,.92);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--g700);
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 0 2.5rem;
-    height: 56px;
-  }
-  .brand {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.5rem;
-    letter-spacing: .08em;
-    color: var(--crema);
-  }
-  .brand em { color: var(--naranja); font-style: normal; }
-  .topbar-right {
-    display: flex; align-items: center; gap: 1.5rem;
-  }
-  .pulse {
-    width: 7px; height: 7px; border-radius: 50%;
-    background: var(--verde);
-    box-shadow: 0 0 0 0 rgba(46,204,113,.4);
-    animation: sonar 2s ease-out infinite;
-  }
-  @keyframes sonar {
-    0%   { box-shadow: 0 0 0 0 rgba(46,204,113,.4); }
-    70%  { box-shadow: 0 0 0 8px rgba(46,204,113,0); }
-    100% { box-shadow: 0 0 0 0 rgba(46,204,113,0); }
-  }
-  .topbar-meta {
-    font-family: 'Space Mono', monospace;
-    font-size: .6rem;
-    color: var(--g400);
-    letter-spacing: .1em;
-    text-align: right;
-    line-height: 1.6;
-  }
-
-  /* ── LAYOUT ── */
-  .page { max-width: 1280px; margin: 0 auto; padding: 2rem 2.5rem 4rem; }
-
-  /* ── HERO ── */
-  .hero {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    align-items: end;
-    padding-bottom: 1.5rem;
-    margin-bottom: 2rem;
-    border-bottom: 1px solid var(--g700);
-    position: relative;
-    animation: fadeUp .5s ease both;
-  }
-  .hero::after {
-    content: '';
-    position: absolute; bottom: -1px; left: 0;
-    width: 60px; height: 2px;
-    background: var(--naranja);
-  }
-  .hero-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(2.4rem, 4.5vw, 3.8rem);
-    letter-spacing: .06em;
-    line-height: .95;
-    color: var(--blanco);
-  }
-  .hero-title span { color: var(--naranja); }
-  .hero-sub {
-    font-family: 'Space Mono', monospace;
-    font-size: .6rem;
-    letter-spacing: .22em;
-    color: var(--g400);
-    text-transform: uppercase;
-    margin-top: .5rem;
-  }
-  .hero-date {
-    font-family: 'Space Mono', monospace;
-    font-size: .65rem;
-    color: var(--g400);
-    text-align: right;
-    line-height: 1.8;
-  }
-
-  /* ── SECTION LABEL ── */
-  .sec-label {
-    font-family: 'Space Mono', monospace;
-    font-size: .58rem;
-    letter-spacing: .22em;
-    color: var(--naranja);
-    text-transform: uppercase;
-    display: flex; align-items: center; gap: .8rem;
-    margin-bottom: .9rem;
-  }
-  .sec-label::after { content: ''; flex:1; height:1px; background: var(--g700); }
-
-  /* ── KPI STRIP ── */
-  .kpi-strip {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    border: 1px solid var(--g700);
-    border-radius: 4px;
-    overflow: hidden;
-    margin-bottom: 2rem;
-    animation: fadeUp .5s ease .08s both;
-  }
-  @media (max-width: 900px) { .kpi-strip { grid-template-columns: repeat(3,1fr); } }
-
-  .kpi {
-    background: var(--g900);
-    padding: 1.2rem 1.3rem;
-    border-right: 1px solid var(--g700);
-    transition: background .18s;
-    cursor: default;
-  }
-  .kpi:last-child { border-right: none; }
-  .kpi:hover { background: var(--g800); }
-  .kpi-lbl {
-    font-family: 'Space Mono', monospace;
-    font-size: .56rem;
-    letter-spacing: .14em;
-    color: var(--g400);
-    text-transform: uppercase;
-    margin-bottom: .35rem;
-  }
-  .kpi-val {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 2rem;
-    line-height: 1;
-    color: var(--crema);
-  }
-  .kpi-val.orange { color: var(--naranja); }
-  .kpi-val.green  { color: var(--verde); }
-  .kpi-val.red    { color: var(--rojo); }
-  .kpi-hint { font-size: .66rem; color: var(--g400); margin-top: .2rem; }
-  .kpi-loading { opacity: .3; font-size: .7rem; font-family: 'Space Mono',monospace; }
-
-  /* ── TWO-COL ── */
-  .two-col {
-    display: grid;
-    grid-template-columns: 1fr 340px;
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-    animation: fadeUp .5s ease .16s both;
-  }
-  @media (max-width: 1000px) { .two-col { grid-template-columns: 1fr; } }
-
-  /* ── EVENTS TABLE ── */
-  .card {
-    background: var(--g900);
-    border: 1px solid var(--g700);
-    border-radius: 4px;
-    overflow: hidden;
-  }
-  .card-head {
-    background: var(--g800);
-    border-bottom: 1px solid var(--g700);
-    padding: .7rem 1.2rem;
-    display: flex; align-items: center; justify-content: space-between;
-  }
-  .card-head-title {
-    font-family: 'Space Mono', monospace;
-    font-size: .6rem;
-    letter-spacing: .15em;
-    color: var(--g300);
-    text-transform: uppercase;
-  }
-  .card-head-link {
-    font-family: 'Space Mono', monospace;
-    font-size: .58rem;
-    color: var(--naranja);
-    text-decoration: none;
-    letter-spacing: .1em;
-    opacity: .7;
-    transition: opacity .15s;
-  }
-  .card-head-link:hover { opacity: 1; }
-
-  .ev-table { width: 100%; border-collapse: collapse; }
-  .ev-table th {
-    font-family: 'Space Mono', monospace;
-    font-size: .55rem;
-    letter-spacing: .12em;
-    color: var(--g400);
-    text-transform: uppercase;
-    padding: .55rem 1rem;
-    text-align: left;
-    border-bottom: 1px solid var(--g700);
-    background: var(--g800);
-  }
-  .ev-table td {
-    padding: .7rem 1rem;
-    font-size: .78rem;
-    border-bottom: 1px solid var(--g800);
-    color: var(--crema2);
-    vertical-align: middle;
-  }
-  .ev-table tr:last-child td { border-bottom: none; }
-  .ev-table tr { transition: background .12s; }
-  .ev-table tr:hover td { background: var(--g800); }
-  .ev-name { font-weight: 600; color: var(--blanco); }
-  .ev-org { font-size: .65rem; color: var(--g400); margin-top: .1rem; }
-  .mono { font-family: 'Space Mono', monospace; font-size: .7rem; }
-
-  .badge {
-    display: inline-block;
-    font-family: 'Space Mono', monospace;
-    font-size: .52rem;
-    letter-spacing: .07em;
-    padding: .18rem .5rem;
-    border-radius: 2px;
-    font-weight: 700;
-    text-transform: uppercase;
-    white-space: nowrap;
-  }
-  .b-conf  { background: #0f2b1a; color: var(--verde); }
-  .b-plan  { background: #2e2100; color: var(--amarillo); }
-  .b-prosp { background: #0d1e38; color: var(--azul); }
-  .b-free  { background: #1a1a2e; color: #a78bfa; }
-
-  /* ── AGENDA LATERAL ── */
-  .agenda-list { padding: .5rem 0; }
-  .agenda-item {
-    display: flex; gap: .9rem; align-items: flex-start;
-    padding: .65rem 1.2rem;
-    border-bottom: 1px solid var(--g800);
-    transition: background .12s;
-    cursor: default;
-  }
-  .agenda-item:last-child { border-bottom: none; }
-  .agenda-item:hover { background: var(--g800); }
-  .agenda-date {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.3rem;
-    line-height: 1;
-    color: var(--naranja);
-    min-width: 28px;
-    text-align: center;
-  }
-  .agenda-date-month {
-    font-family: 'Space Mono', monospace;
-    font-size: .5rem;
-    letter-spacing: .1em;
-    color: var(--g400);
-    text-align: center;
-    text-transform: uppercase;
-  }
-  .agenda-info {}
-  .agenda-name { font-size: .78rem; font-weight: 600; color: var(--blanco); }
-  .agenda-meta { font-size: .65rem; color: var(--g400); margin-top: .1rem; }
-
-  /* ── NAV GRID ── */
-  .nav-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
-    gap: .9rem;
-    animation: fadeUp .5s ease .24s both;
-  }
-
-  .nav-card {
-    background: var(--g900);
-    border: 1px solid var(--g700);
-    border-radius: 4px;
-    padding: 1.3rem 1.2rem;
-    text-decoration: none;
-    display: flex; flex-direction: column; gap: .55rem;
-    position: relative; overflow: hidden;
-    transition: border-color .2s, transform .15s, box-shadow .2s;
-  }
-  .nav-card::before {
-    content: '';
-    position: absolute; top: 0; left: 0; right: 0;
-    height: 2px; background: var(--naranja);
-    transform: scaleX(0); transform-origin: left;
-    transition: transform .22s ease;
-  }
-  .nav-card:hover {
-    border-color: var(--naranja);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(255,90,26,.1);
-  }
-  .nav-card:hover::before { transform: scaleX(1); }
-  .nav-icon { font-size: 1.4rem; }
-  .nav-name {
-    font-family: 'Bebas Neue', sans-serif;
+    background: var(--escenario);
+    color: var(--tinta);
+    font-family: var(--f-body);
     font-size: 1rem;
-    letter-spacing: .04em;
-    color: var(--blanco);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
   }
-  .nav-desc { font-size: .68rem; color: var(--g400); line-height: 1.45; }
-  .nav-chip {
-    display: inline-block; margin-top: auto;
-    font-family: 'Space Mono', monospace;
-    font-size: .5rem; letter-spacing: .1em;
-    padding: .18rem .5rem; border-radius: 2px;
-    background: var(--g700); color: var(--g400);
-    text-transform: uppercase;
-    align-self: flex-start;
-  }
-  .nav-chip.hot { background: #2a1200; color: var(--naranja); }
-  .nav-chip.live { background: #0a2016; color: var(--verde); }
+  a { color: inherit; }
+  :focus-visible { outline: 2px solid var(--naranja); outline-offset: 2px; border-radius: 2px; }
 
-  /* ── FOOTER ── */
-  .footer {
-    margin-top: 3rem;
-    padding-top: 1.2rem;
-    border-top: 1px solid var(--g700);
-    display: flex; justify-content: space-between; align-items: center;
-    font-family: 'Space Mono', monospace;
-    font-size: .58rem;
-    color: var(--g400);
-    letter-spacing: .08em;
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 clamp(1rem, 4vw, 2.5rem); }
+
+  /* ── Encabezado ── */
+  .top {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 1rem;
+    padding-top: 1.25rem; padding-bottom: 1rem;
+    border-bottom: 1px solid var(--cable);
+  }
+  .wordmark {
+    font-family: var(--f-display); font-weight: 800;
+    font-size: 1.6rem; line-height: 1; letter-spacing: .01em;
+    margin: 0;
+  }
+  .wordmark small { font-weight: 600; color: var(--humo); font-size: .62em; margin-left: .35em; letter-spacing: .02em; }
+  .reloj { color: var(--humo); font-size: .95rem; text-align: right; white-space: nowrap; }
+  .reloj b { color: var(--tinta); font-weight: 700; }
+  .reloj .corto { display: none; }
+  @media (max-width: 560px) {
+    .wordmark small { display: none; }
+    .reloj .largo { display: none; }
+    .reloj .corto { display: inline; }
   }
 
-  /* ── LOADING SKELETON ── */
-  .skel {
+  /* ── Cinta (rótulo de caja) ── */
+  .cinta {
     display: inline-block;
-    width: 60px; height: 10px;
+    background: var(--cinta); color: var(--cinta-ink);
+    font-family: var(--f-display); font-weight: 800;
+    font-size: 1.05rem; line-height: 1; letter-spacing: .02em;
+    padding: .38rem .8rem .32rem;
+    transform: rotate(-1.2deg);
+    clip-path: polygon(0 8%, 3% 0, 97% 4%, 100% 0, 98% 52%, 100% 100%, 4% 94%, 0 100%, 2% 48%);
+    margin: 0;
+  }
+
+  /* ── Próximo show ── */
+  .proximo { padding: clamp(1.75rem, 5vw, 3.25rem) 0 clamp(1.5rem, 4vw, 2.5rem); border-bottom: 1px solid var(--cable); }
+  .proximo-fecha {
+    font-family: var(--f-stencil); font-weight: 800;
+    font-size: clamp(4.5rem, 17vw, 11.5rem);
+    line-height: .84; letter-spacing: -.01em;
+    margin: 1.1rem 0 .75rem;
+    display: flex; flex-wrap: wrap; align-items: flex-end; column-gap: .16em;
+    text-transform: uppercase;
+  }
+  .proximo-fecha .dia-sem { color: var(--humo); }
+  .proximo-fecha .mes { color: var(--humo); }
+  .proximo-cuando {
+    font-family: var(--f-display); font-weight: 800; color: var(--naranja);
+    font-size: clamp(1.6rem, 4.5vw, 2.6rem); line-height: 1;
+    display: inline-flex; align-items: center; gap: .5rem;
+  }
+  .en-vivo { width: .5em; height: .5em; border-radius: 50%; background: var(--naranja); display: inline-block; }
+  .proximo-nombre {
+    font-family: var(--f-display); font-weight: 800;
+    font-size: clamp(2rem, 6vw, 3.6rem); line-height: 1; letter-spacing: .005em;
+    margin: .6rem 0 .9rem;
+    max-width: 22ch;
+  }
+  .proximo-datos { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1.25rem; color: var(--humo); font-size: 1.05rem; }
+  .proximo-datos strong { color: var(--tinta); font-weight: 700; }
+  .resumen { margin: 1.25rem 0 0; color: var(--humo); max-width: 60ch; }
+  .resumen strong { color: var(--tinta); }
+
+  .boton {
+    display: inline-block; text-decoration: none;
+    background: var(--naranja); color: #1A0D06;
+    font-weight: 700; font-size: .98rem;
+    padding: .55rem 1rem; border-radius: 3px;
+  }
+  .boton:hover { background: #FF7440; }
+
+  .estado { display: inline-flex; align-items: center; gap: .4rem; font-size: .92rem; font-weight: 700; white-space: nowrap; }
+  .estado::before { content: ''; width: .55rem; height: .55rem; border-radius: 50%; background: currentColor; }
+  .estado.confirmado { color: var(--verde); }
+  .estado.por-confirmar { color: var(--ambar); }
+  .estado.gratis { color: #B9A7FF; }
+  .estado.cancelado { color: var(--humo); }
+
+  /* ── Cuerpo: agenda + accesos ── */
+  .cuerpo {
+    display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    gap: clamp(2rem, 5vw, 4rem);
+    padding: clamp(1.75rem, 4vw, 2.75rem) 0 3rem;
+    align-items: start;
+  }
+  @media (max-width: 860px) { .cuerpo { grid-template-columns: 1fr; } }
+
+  .bloque-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1.1rem; }
+  .bloque-head a { color: var(--humo); font-size: .95rem; text-underline-offset: 3px; }
+  .bloque-head a:hover { color: var(--tinta); }
+
+  /* Agenda */
+  .agenda { list-style: none; margin: 0; padding: 0; }
+  .mes-sep {
+    font-family: var(--f-display); font-weight: 600; color: var(--humo);
+    font-size: 1.15rem; letter-spacing: .02em;
+    padding: 1.1rem 0 .35rem; border-bottom: 1px solid var(--cable);
+  }
+  .mes-sep:first-child { padding-top: 0; }
+  .ev {
+    display: grid; grid-template-columns: 4.1rem minmax(0, 1fr) auto;
+    gap: .25rem 1rem; align-items: start;
+    padding: .9rem 0; border-bottom: 1px solid var(--cable);
+  }
+  .ev-fecha { line-height: 1; }
+  .ev-dia { font-family: var(--f-stencil); font-weight: 800; font-size: 2.35rem; display: block; }
+  .ev-sem { color: var(--humo); font-size: .88rem; display: block; margin-top: .2rem; }
+  .ev-nombre { font-family: var(--f-display); font-weight: 800; font-size: 1.45rem; line-height: 1.05; margin: 0; }
+  .ev-meta { display: flex; flex-wrap: wrap; gap: .15rem .9rem; color: var(--humo); font-size: .93rem; margin-top: .35rem; }
+  .ev-meta a { color: var(--tinta); text-underline-offset: 3px; }
+  .ev-lado { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: .35rem; padding-top: .2rem; }
+  .ev-cuando { color: var(--humo); font-size: .88rem; }
+  .ev.es-hoy .ev-dia, .ev.es-hoy .ev-cuando { color: var(--naranja); }
+  .ev.cancelado .ev-nombre { text-decoration: line-through; color: var(--humo); }
+  @media (max-width: 480px) {
+    .ev { grid-template-columns: 3.4rem minmax(0, 1fr); }
+    .ev-lado { grid-column: 2; align-items: flex-start; flex-direction: row; gap: .9rem; padding-top: 0; }
+    .ev-dia { font-size: 2rem; }
+  }
+
+  .aviso {
+    border-left: 3px solid var(--ambar); background: var(--tarima);
+    padding: .75rem 1rem; color: var(--tinta); font-size: .95rem; margin: 0 0 1rem;
+  }
+  .vacio { color: var(--humo); padding: 1rem 0; max-width: 52ch; }
+  .vacio code, .pie code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: .9em; color: var(--tinta); }
+
+  /* Accesos */
+  .buscar { position: relative; display: block; margin-bottom: 1.75rem; }
+  .buscar input {
+    width: 100%; font: inherit; color: var(--tinta);
+    background: var(--tarima); border: 1px solid var(--cable); border-radius: 3px;
+    padding: .7rem .9rem .7rem 2.4rem;
+  }
+  .buscar input::placeholder { color: var(--humo); }
+  .buscar input:focus { outline: none; border-color: var(--naranja); }
+  .buscar svg { position: absolute; left: .8rem; top: 50%; transform: translateY(-50%); color: var(--humo); }
+  .buscar kbd {
+    position: absolute; right: .7rem; top: 50%; transform: translateY(-50%);
+    font-family: var(--f-body); font-size: .8rem; color: var(--humo); line-height: 1.5;
+    border: 1px solid var(--cable); border-radius: 3px; padding: 0 .4rem;
+  }
+  @media (hover: none) { .buscar kbd { display: none; } }
+
+  .grupo { margin-bottom: 1.6rem; }
+  .grupo .cinta { margin-bottom: .55rem; }
+  .grupo:nth-child(even) .cinta { transform: rotate(.9deg); }
+  .links { list-style: none; margin: 0; padding: 0; }
+  .links a {
+    display: block; text-decoration: none;
+    padding: .6rem .6rem; margin: 0 -.6rem;
     border-radius: 3px;
-    background: linear-gradient(90deg, var(--g700) 25%, var(--g600) 50%, var(--g700) 75%);
-    background-size: 200% 100%;
-    animation: shimmer 1.4s infinite;
-    vertical-align: middle;
   }
-  @keyframes shimmer { to { background-position: -200% 0; } }
+  .links a:hover { background: var(--tarima); }
+  .links a:hover .l-nombre { color: var(--naranja); }
+  .l-nombre { font-family: var(--f-display); font-weight: 800; font-size: 1.25rem; line-height: 1.1; display: block; }
+  .l-desc { color: var(--humo); font-size: .92rem; display: block; margin-top: .1rem; }
+  .sin-resultados { color: var(--humo); display: none; }
 
-  /* ── ANIMS ── */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(10px); }
-    to   { opacity: 1; transform: translateY(0); }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  /* Pie */
+  .pie {
+    border-top: 1px solid var(--cable);
+    padding: 1.25rem 0 2.5rem;
+    color: var(--humo); font-size: .9rem;
+    display: grid; grid-template-columns: 1fr auto; gap: .5rem 2rem;
   }
+  .pie p { margin: 0; }
+  @media (max-width: 700px) { .pie { grid-template-columns: 1fr; } }
 
-  /* ── ERROR BANNER ── */
-  .error-banner {
-    background: #2a0a0a; border: 1px solid var(--rojo);
-    border-radius: 4px; padding: .8rem 1.2rem;
-    font-size: .75rem; color: #ff9999;
-    margin-bottom: 1rem; display: none;
+  /* Único momento animado: entra la fecha del próximo show */
+  @media (prefers-reduced-motion: no-preference) {
+    .proximo-fecha { animation: entra .6s cubic-bezier(.2,.7,.2,1) both; }
+    .en-vivo { animation: late 1.6s ease-in-out infinite; }
+    @keyframes entra { from { opacity: 0; transform: translateY(.12em); } to { opacity: 1; transform: none; } }
+    @keyframes late { 50% { opacity: .25; } }
   }
 </style>
 </head>
 <body>
 
-<div class="topbar">
-  <div class="brand">La Guarde<em>ría</em> Records</div>
-  <div class="topbar-right">
-    <div class="pulse"></div>
-    <div class="topbar-meta">
-      CEO: Luis Mario Vargas<br>
-      COO: Daniela Peña Flores<br>
-      CMO: Daniela Ramírez Méndez
-    </div>
-  </div>
-</div>
+<header class="wrap top">
+  <p class="wordmark">La Guardería Records <small>Sistema operativo</small></p>
+  <div class="reloj" id="reloj" aria-live="off"></div>
+</header>
 
-<div class="page">
+<main class="wrap">
 
-  <!-- HERO -->
-  <div class="hero">
-    <div>
-      <div class="hero-title">Sistema<br><span>Operativo</span></div>
-      <div class="hero-sub">La Guardería Records &nbsp;·&nbsp; Querétaro, MX</div>
-    </div>
-    <div class="hero-date" id="live-date"></div>
-  </div>
+  <section class="proximo" id="proximo" aria-labelledby="proximo-label">
+    <h1 class="cinta" id="proximo-label">Próximo show</h1>
+    <div id="proximo-contenido"><p class="vacio">Cargando agenda…</p></div>
+  </section>
 
-  <div class="error-banner" id="error-banner">
-    ⚠️ No se pudieron cargar datos en vivo del Sheet. Verifica que el archivo esté compartido como "Cualquier persona con el link puede ver". Los links de navegación siguen funcionando.
-  </div>
+  <div class="cuerpo">
 
-  <!-- KPIs -->
-  <div class="sec-label">Estado general</div>
-  <div class="kpi-strip">
-    <div class="kpi">
-      <div class="kpi-lbl">Eventos 2026</div>
-      <div class="kpi-val orange" id="kpi-total"><span class="skel"></span></div>
-      <div class="kpi-hint">confirmados + planeación</div>
-    </div>
-    <div class="kpi">
-      <div class="kpi-lbl">Próximo show</div>
-      <div class="kpi-val" id="kpi-next" style="font-size:1.1rem;padding-top:.4rem"><span class="skel" style="width:100px"></span></div>
-      <div class="kpi-hint" id="kpi-next-date"></div>
-    </div>
-    <div class="kpi">
-      <div class="kpi-lbl">Ingresos proyect.</div>
-      <div class="kpi-val green" id="kpi-ingresos"><span class="skel"></span></div>
-      <div class="kpi-hint">desde hoja EVENTOS</div>
-    </div>
-    <div class="kpi">
-      <div class="kpi-lbl">Gastos proyect.</div>
-      <div class="kpi-val red" id="kpi-gastos"><span class="skel"></span></div>
-      <div class="kpi-hint">desde hoja EVENTOS</div>
-    </div>
-    <div class="kpi">
-      <div class="kpi-lbl">Utilidad proyect.</div>
-      <div class="kpi-val" id="kpi-utilidad"><span class="skel"></span></div>
-      <div class="kpi-hint">ingresos − gastos</div>
-    </div>
-    <div class="kpi">
-      <div class="kpi-lbl">Shows totales agenda</div>
-      <div class="kpi-val orange">14</div>
-      <div class="kpi-hint">abr – oct 2026</div>
-    </div>
-  </div>
-
-  <!-- MAIN TWO-COL -->
-  <div class="two-col">
-
-    <!-- Tabla eventos -->
-    <div>
-      <div class="sec-label">Próximos eventos</div>
-      <div class="card">
-        <div class="card-head">
-          <span class="card-head-title">Hoja maestra EVENTOS</span>
-          <a class="card-head-link" href="https://docs.google.com/spreadsheets/d/1nIjczvzycRjWZH3vNILo6cYQuRKo17QJ/edit?gid=14133420#gid=14133420" target="_blank">ABRIR SHEET ↗</a>
-        </div>
-        <table class="ev-table">
-          <thead>
-            <tr>
-              <th>Evento</th>
-              <th>Fecha</th>
-              <th>Horario</th>
-              <th>Estado</th>
-            </tr>
-          </thead>
-          <tbody id="ev-tbody">
-            <tr><td colspan="4" style="text-align:center;padding:2rem;color:var(--g400)"><span class="skel" style="width:200px"></span></td></tr>
-          </tbody>
-        </table>
+    <section aria-labelledby="agenda-titulo">
+      <div class="bloque-head">
+        <h2 class="cinta" id="agenda-titulo">Agenda</h2>
+        <a href="https://calendar.google.com/calendar/u/1?cid=Y29udGFjdG9AbGFndWFyZGVyaWFyZWNvcmRzLmNvbQ" target="_blank" rel="noopener">Abrir Google Calendar</a>
       </div>
-    </div>
+      <div id="agenda-aviso"></div>
+      <ol class="agenda" id="agenda"></ol>
+    </section>
 
-    <!-- Agenda lateral -->
-    <div>
-      <div class="sec-label">Agenda 2026</div>
-      <div class="card">
-        <div class="card-head">
-          <span class="card-head-title">Todos los shows</span>
-          <a class="card-head-link" href="https://calendar.google.com/calendar/u/1?cid=Y29udGFjdG9AbGFndWFyZGVyaWFyZWNvcmRzLmNvbQ" target="_blank">CALENDAR ↗</a>
+    <section aria-labelledby="accesos-titulo">
+      <h2 class="sr-only" id="accesos-titulo">Accesos</h2>
+      <label class="buscar">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.6"/><path d="M11 11l3.5 3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <span class="sr-only">Buscar herramienta</span>
+        <input id="buscar" type="search" placeholder="Buscar: inventario, riders, finanzas…" autocomplete="off">
+        <kbd>/</kbd>
+      </label>
+
+      <div id="accesos">
+
+        <div class="grupo">
+          <h3 class="cinta">Operación</h3>
+          <ul class="links">
+            <li><a href="https://docs.google.com/spreadsheets/d/1nIjczvzycRjWZH3vNILo6cYQuRKo17QJ/edit?gid=14133420#gid=14133420" target="_blank" rel="noopener"><span class="l-nombre">Hoja maestra de eventos</span><span class="l-desc">Shows, venues, ingresos y utilidad por evento.</span></a></li>
+            <li><a href="https://docs.google.com/spreadsheets/d/1nIjczvzycRjWZH3vNILo6cYQuRKo17QJ/edit?gid=1669943052#gid=1669943052" target="_blank" rel="noopener"><span class="l-nombre">Corrida de gastos</span><span class="l-desc">Presupuesto por show con punto de equilibrio. Una copia por evento.</span></a></li>
+            <li><a href="https://docs.google.com/spreadsheets/d/1nIjczvzycRjWZH3vNILo6cYQuRKo17QJ/edit?gid=1024226207#gid=1024226207" target="_blank" rel="noopener"><span class="l-nombre">Resumen del sistema</span><span class="l-desc">La pestaña Dashboard del Excel, con los totales de todas las hojas.</span></a></li>
+            <li><a href="https://calendar.google.com/calendar/u/1?cid=Y29udGFjdG9AbGFndWFyZGVyaWFyZWNvcmRzLmNvbQ" target="_blank" rel="noopener"><span class="l-nombre">Calendario</span><span class="l-desc">Shows, fechas de producción, entregas de prensa y pagos.</span></a></li>
+            <li><a href="https://drive.google.com/drive/folders/1AqIry21M-9go6cGe6R8VhB1FmwDP5dr8" target="_blank" rel="noopener"><span class="l-nombre">Drive de LGR</span><span class="l-desc">Carpeta raíz: contratos, permisos, flyers, minutas y todo el archivo.</span></a></li>
+          </ul>
         </div>
-        <div class="agenda-list" id="agenda-list"></div>
+
+        <div class="grupo">
+          <h3 class="cinta">Producción</h3>
+          <ul class="links">
+            <li><a href="https://docs.google.com/spreadsheets/d/1N9lHYcptVrk9xu0fkHs9fX9L0-CNoCwNx6eaSNMQK4Y/edit" target="_blank" rel="noopener"><span class="l-nombre">Inventario de equipo</span><span class="l-desc">Una fila por pieza: dueño, estado, caja y si ya se verificó en bodega.</span></a></li>
+            <li><a href="https://docs.google.com/spreadsheets/d/15uxoadPhAOsFrEakP2XulMdXP_iOLLjUnF-eErirlRc/edit" target="_blank" rel="noopener"><span class="l-nombre">Cajas</span><span class="l-desc">Qué va en cada caja, de la CJ-01 a la CJ-09.</span></a></li>
+            <li><a href="https://docs.google.com/spreadsheets/d/1QBlr41BlQhx3u07ZG1QimBftSglRDJxpTYD5uiniFYQ/edit" target="_blank" rel="noopener"><span class="l-nombre">Equipo de aliados</span><span class="l-desc">Lo que podemos rentar a terceros para cubrir huecos de un rider.</span></a></li>
+            <li><a href="https://drive.google.com/drive/folders/1RGmSfe4Z561aCdK7CVEIeCorWm1ldSXQ" target="_blank" rel="noopener"><span class="l-nombre">Riders</span><span class="l-desc">Sube aquí el rider de cada banda.</span></a></li>
+            <li><a href="https://drive.google.com/drive/folders/1RAJ8qR2efwuUmjt3PEZYa417DfK_tDf0" target="_blank" rel="noopener"><span class="l-nombre">Hojas de llamado</span><span class="l-desc">Horarios del crew y listas de carga por caja de cada show.</span></a></li>
+          </ul>
+        </div>
+
+        <div class="grupo">
+          <h3 class="cinta">Dinero</h3>
+          <ul class="links">
+            <li><a href="https://docs.google.com/spreadsheets/d/1nIjczvzycRjWZH3vNILo6cYQuRKo17QJ/edit?gid=791197186#gid=791197186" target="_blank" rel="noopener"><span class="l-nombre">Finanzas</span><span class="l-desc">Registro de ingresos y gastos con balance acumulado.</span></a></li>
+            <li><a href="https://drive.google.com/drive/folders/1b05hEgb0wQtr_9ivW5V_UKpcYBmUx3Fe" target="_blank" rel="noopener"><span class="l-nombre">Cotizaciones</span><span class="l-desc">Plantillas para cotizar renta de El Árbol, audio y producción.</span></a></li>
+            <li><a href="https://drive.google.com/drive/folders/1uH2yzRk4meYaCiT-xvBGfFuJVMEcNCfm" target="_blank" rel="noopener"><span class="l-nombre">Preventas</span><span class="l-desc">Hojas de preventa por evento.</span></a></li>
+            <li><a href="https://drive.google.com/drive/folders/1p_uaZzeE4rQ5Cqk9rdIGOH-bq0E8yJd1" target="_blank" rel="noopener"><span class="l-nombre">Gastos de eventos pasados</span><span class="l-desc">Archivo de hojas de gastos desde enero de 2025.</span></a></li>
+          </ul>
+        </div>
+
+        <div class="grupo">
+          <h3 class="cinta">Gente</h3>
+          <ul class="links">
+            <li><a href="https://docs.google.com/spreadsheets/d/1nIjczvzycRjWZH3vNILo6cYQuRKo17QJ/edit?gid=78456339#gid=78456339" target="_blank" rel="noopener"><span class="l-nombre">Bandas</span><span class="l-desc">Directorio de artistas, fees e historial de shows juntos.</span></a></li>
+            <li><a href="https://docs.google.com/spreadsheets/d/1nIjczvzycRjWZH3vNILo6cYQuRKo17QJ/edit?gid=1891961452#gid=1891961452" target="_blank" rel="noopener"><span class="l-nombre">Proveedores</span><span class="l-desc">Fletes, hospedaje, catering, diseño y prensa.</span></a></li>
+            <li><a href="https://drive.google.com/drive/folders/1-brwf4MgaVVIuZ4KggvIAnfcFdnEvyfQ" target="_blank" rel="noopener"><span class="l-nombre">Contratos</span><span class="l-desc">Contratos firmados con bandas, agencias y clientes.</span></a></li>
+          </ul>
+        </div>
+
+        <div class="grupo">
+          <h3 class="cinta">Promo</h3>
+          <ul class="links">
+            <li><a href="https://adsmanager.facebook.com/adsmanager/manage/campaigns?act=631853348858675" target="_blank" rel="noopener"><span class="l-nombre">Meta Ads</span><span class="l-desc">Campañas activas en Instagram y Facebook.</span></a></li>
+            <li><a href="https://www.instagram.com/laguarderiarecords/" target="_blank" rel="noopener"><span class="l-nombre">Instagram</span><span class="l-desc">@laguarderiarecords</span></a></li>
+            <li><a href="https://drive.google.com/drive/folders/12koMgUdhUjpsCKnxv5NaP3oUsIMkbA8A" target="_blank" rel="noopener"><span class="l-nombre">Prensa y sponsors</span><span class="l-desc">One-pagers, hoja de prensa y prospectos de patrocinio.</span></a></li>
+          </ul>
+        </div>
+
+        <p class="sin-resultados" id="sin-resultados"></p>
       </div>
-    </div>
+    </section>
 
   </div>
+</main>
 
-  <!-- NAV -->
-  <div class="sec-label">Módulos del sistema</div>
-  <div class="nav-grid">
-    <a class="nav-card" href="https://docs.google.com/spreadsheets/d/1nIjczvzycRjWZH3vNILo6cYQuRKo17QJ/edit?gid=1024226207#gid=1024226207" target="_blank">
-      <span class="nav-icon">📊</span>
-      <span class="nav-name">Dashboard</span>
-      <span class="nav-desc">Resumen ejecutivo con KPIs automáticos de todos los módulos.</span>
-      <span class="nav-chip hot">Inicio</span>
-    </a>
-    <a class="nav-card" href="https://docs.google.com/spreadsheets/d/1nIjczvzycRjWZH3vNILo6cYQuRKo17QJ/edit?gid=14133420#gid=14133420" target="_blank">
-      <span class="nav-icon">🎸</span>
-      <span class="nav-name">Eventos</span>
-      <span class="nav-desc">Hoja maestra: shows, fechas, venues, ingresos y utilidad por evento.</span>
-      <span class="nav-chip hot">Hoja principal</span>
-    </a>
-    <a class="nav-card" href="https://docs.google.com/spreadsheets/d/1nIjczvzycRjWZH3vNILo6cYQuRKo17QJ/edit?gid=1669943052#gid=1669943052" target="_blank">
-      <span class="nav-icon">📋</span>
-      <span class="nav-name">Corrida de Gastos</span>
-      <span class="nav-desc">Presupuesto por evento: flete, hospedaje, backline, diseño, catering. Break-even auto.</span>
-      <span class="nav-chip">1 copia x show</span>
-    </a>
-    <a class="nav-card" href="https://docs.google.com/spreadsheets/d/1nIjczvzycRjWZH3vNILo6cYQuRKo17QJ/edit?gid=1734967264#gid=1734967264" target="_blank">
-      <span class="nav-icon">🎛️</span>
-      <span class="nav-name">Backline</span>
-      <span class="nav-desc">Inventario: Tóttem, Casa Fantasma, Alpha Dog, La Nostalgia + equipo propio.</span>
-      <span class="nav-chip live">15 equipos</span>
-    </a>
-    <a class="nav-card" href="https://docs.google.com/spreadsheets/d/1nIjczvzycRjWZH3vNILo6cYQuRKo17QJ/edit?gid=78456339#gid=78456339" target="_blank">
-      <span class="nav-icon">🎤</span>
-      <span class="nav-name">Bandas / CRM</span>
-      <span class="nav-desc">Directorio de artistas, fees, estado de relación e historial de shows juntos.</span>
-      <span class="nav-chip live">10 bandas</span>
-    </a>
-    <a class="nav-card" href="https://docs.google.com/spreadsheets/d/1nIjczvzycRjWZH3vNILo6cYQuRKo17QJ/edit?gid=1891961452#gid=1891961452" target="_blank">
-      <span class="nav-icon">🔧</span>
-      <span class="nav-name">Proveedores</span>
-      <span class="nav-desc">Fletes (Diego, Oscar), hospedaje (Irán), catering (Rafa Torei), diseño, prensa.</span>
-      <span class="nav-chip">18 contactos</span>
-    </a>
-    <a class="nav-card" href="https://docs.google.com/spreadsheets/d/1nIjczvzycRjWZH3vNILo6cYQuRKo17QJ/edit?gid=791197186#gid=791197186" target="_blank">
-      <span class="nav-icon">💰</span>
-      <span class="nav-name">Finanzas</span>
-      <span class="nav-desc">Registro de ingresos y gastos. Balance acumulado automático por movimiento.</span>
-      <span class="nav-chip">Registro continuo</span>
-    </a>
-    <a class="nav-card" href="https://calendar.google.com/calendar/u/1?cid=Y29udGFjdG9AbGFndWFyZGVyaWFyZWNvcmRzLmNvbQ" target="_blank">
-      <span class="nav-icon">📅</span>
-      <span class="nav-name">Calendario</span>
-      <span class="nav-desc">Shows confirmados, fechas de producción, deadlines de prensa y pagos.</span>
-      <span class="nav-chip">Google Calendar</span>
-    </a>
-    <a class="nav-card" href="https://drive.google.com/drive/folders/1AqIry21M-9go6cGe6R8VhB1FmwDP5dr8" target="_blank">
-      <span class="nav-icon">📁</span>
-      <span class="nav-name">Drive</span>
-      <span class="nav-desc">Carpetas por evento: presupuesto, contrato, cartel, rider, logística.</span>
-      <span class="nav-chip">Google Drive</span>
-    </a>
-  </div>
+<footer class="wrap pie">
+  <p>Mario Vargas, CEO. Daniela Peña Flores, COO. Daniela Ramírez Méndez, CMO.</p>
+  <p id="fuente">Sistema v2.0, Querétaro</p>
+</footer>
 
-  <div class="footer">
-    <span>La Guardería Records · Sistema v1.0 · Querétaro 2026</span>
-    <span id="last-updated">Actualizando datos…</span>
-  </div>
-
-</div>
-
+<script src="eventos.js"></script>
 <script>
-// ── CONFIG ───────────────────────────────────────────────────────────────────
-const SHEET_ID = '1nIjczvzycRjWZH3vNILo6cYQuRKo17QJ';
+(function () {
+  'use strict';
 
-// Rangos de la hoja EVENTOS (gid 14133420) — ajusta si cambian filas
-// Columnas: B=Evento, C=Fecha, D=Venue, F=Responsable, G=Estado, M=Ingresos, N=Gastos, O=Utilidad
-const EVENTS_RANGE = encodeURIComponent('🎸 EVENTOS!A4:P20');
-const FINANCE_RANGE = encodeURIComponent('🎸 EVENTOS!M4:O20');
+  const DIAS = ['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb'];
+  const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+  const MESES_CORTOS = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+  const TIPOS = { lgr: 'Producción LGR', renta: 'Renta El Árbol', externo: 'Externo' };
 
-// ── AGENDA (hardcoded desde tu lista, siempre disponible) ───────────────────
-const AGENDA = [
-  { d:11, m:'ABR', name:'Chill & Go',            org:'La Guardería Records', hora:'16:00–23:00', libre:false },
-  { d:17, m:'ABR', name:'Evento WeFort',          org:'',                    hora:'18:00–23:00', libre:false },
-  { d:18, m:'ABR', name:'Evento Reggae',          org:'La Guardería Records', hora:'16:00–23:00', libre:false },
-  { d:25, m:'ABR', name:'Los Vaguens en Qro',     org:'La Guardería Records', hora:'16:00–23:00', libre:false },
-  { d:26, m:'ABR', name:'Kid Manny',              org:'La Guardería Records', hora:'16:00–23:00', libre:false },
-  { d: 1, m:'MAY', name:'Plutonio de Alto Grado', org:'La Guardería Records', hora:'16:00–23:00', libre:false },
-  { d: 2, m:'MAY', name:'Kaoz Leal',              org:'',                    hora:'19:30',        libre:false },
-  { d: 9, m:'MAY', name:'Ruido en Casa (La Bestia Radio)', org:'',           hora:'16:00–23:00', libre:true  },
-  { d:23, m:'MAY', name:'Gris Romero en Qro',     org:'',                    hora:'16:00–23:00', libre:false },
-  { d: 5, m:'JUN', name:'Lío Petricolor en Qro',  org:'La Guardería Records', hora:'16:00–23:00', libre:false },
-  { d: 8, m:'AGO', name:'Urifest',                org:'Pulquería El Borrego', hora:'',            libre:false },
-  { d: 4, m:'SEP', name:'Psyched! Fest Qro',      org:'MACQ',                hora:'',            libre:false },
-  { d: 5, m:'SEP', name:'GRTSCH en Qro',          org:'La Guardería Records', hora:'16:00–23:00', libre:false },
-  { d:31, m:'OCT', name:'Unperro Andaluz y Ven y Mira', org:'MCQRO',        hora:'',            libre:false },
-];
+  let eventos = [];
+  let fuente = 'lista';      // 'lista' | 'hoja'
+  let avisoHoja = '';
 
-// ── LIVE DATE ────────────────────────────────────────────────────────────────
-function updateDate() {
-  const now = new Date();
-  const opts = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
-  document.getElementById('live-date').innerHTML =
-    now.toLocaleDateString('es-MX', opts).replace(/^\w/, c => c.toUpperCase()) +
-    '<br><span style="color:var(--g400)">' +
-    now.toLocaleTimeString('es-MX', { hour:'2-digit', minute:'2-digit' }) + ' hrs</span>';
-}
-updateDate();
-setInterval(updateDate, 60000);
+  // ── utilidades ──
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const norm = (s) => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim();
+  const linkSeguro = (u) => /^https?:\/\//i.test(String(u || '').trim()) ? String(u).trim() : '';
 
-// ── RENDER AGENDA ─────────────────────────────────────────────────────────────
-function renderAgenda() {
-  const el = document.getElementById('agenda-list');
-  el.innerHTML = AGENDA.map(e => `
-    <div class="agenda-item">
-      <div>
-        <div class="agenda-date">${e.d}</div>
-        <div class="agenda-date-month">${e.m}</div>
-      </div>
-      <div class="agenda-info">
-        <div class="agenda-name">${e.name}${e.libre ? ' <span style="font-size:.55rem;background:#1a1a2e;color:#a78bfa;padding:.1rem .35rem;border-radius:2px;font-family:\'Space Mono\',monospace;letter-spacing:.07em">FREE</span>' : ''}</div>
-        <div class="agenda-meta">${e.org ? e.org + ' · ' : ''}${e.hora}</div>
-      </div>
-    </div>
-  `).join('');
-}
-renderAgenda();
-
-// ── FETCH SHEETS DATA ─────────────────────────────────────────────────────────
-async function fetchRange(range) {
-  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&range=${range}`;
-  const res = await fetch(url);
-  if (!res.ok) throw new Error('fetch failed');
-  const text = await res.text();
-  // Strip Google's JSONP wrapper
-  const json = JSON.parse(text.substring(text.indexOf('{'), text.lastIndexOf('}') + 1));
-  return json.table;
-}
-
-function fmtMXN(val) {
-  if (!val && val !== 0) return '—';
-  return '$' + Number(val).toLocaleString('es-MX', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
-}
-
-function badgeHtml(estado) {
-  if (!estado) return '';
-  const s = String(estado).toUpperCase();
-  if (s.includes('CONFIRM'))  return `<span class="badge b-conf">Confirmado</span>`;
-  if (s.includes('PLANEAC'))  return `<span class="badge b-plan">En planeación</span>`;
-  if (s.includes('PROSPECTO'))return `<span class="badge b-prosp">Prospecto</span>`;
-  return `<span class="badge b-prosp">${estado}</span>`;
-}
-
-function cellVal(row, idx) {
-  try { return row.c[idx] && row.c[idx].v != null ? row.c[idx].v : null; } catch { return null; }
-}
-
-function fmtDate(v) {
-  if (!v) return '';
-  // Google Sheets dates come as "Date(yyyy,m,d)"
-  if (typeof v === 'string' && v.startsWith('Date(')) {
-    const parts = v.slice(5, -1).split(',').map(Number);
-    const d = new Date(parts[0], parts[1], parts[2]);
-    return d.toLocaleDateString('es-MX', { day:'2-digit', month:'short', year:'numeric' });
+  function parseFecha(s) {
+    s = String(s || '').trim();
+    let m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+    if (m) return new Date(+m[1], +m[2] - 1, +m[3]);
+    m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);            // DD/MM/AAAA
+    if (m) return new Date(+m[3], +m[2] - 1, +m[1]);
+    return null;
   }
-  return String(v);
-}
+  const hhmm = (d) => String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
+  function hoy0() { const d = new Date(); d.setHours(0, 0, 0, 0); return d; }
+  function diasHasta(d) { return Math.round((d - hoy0()) / 86400000); }
+  function cuando(n) {
+    if (n === 0) return 'Hoy';
+    if (n === 1) return 'Mañana';
+    if (n < 21) return 'En ' + n + ' días';
+    return 'En ' + Math.round(n / 7) + ' semanas';
+  }
+  function estadoDe(s) {
+    const t = norm(s);
+    if (t.includes('cancel')) return 'cancelado';
+    if (t.includes('grat') || t.includes('free')) return 'gratis';
+    if (t.includes('por') || t.includes('pend') || t.includes('tent')) return 'por-confirmar';
+    if (t.includes('confirm')) return 'confirmado';
+    return 'por-confirmar';
+  }
+  const ESTADO_TXT = { 'confirmado': 'Confirmado', 'por-confirmar': 'Por confirmar', 'gratis': 'Gratis', 'cancelado': 'Cancelado' };
+  const pill = (e) => '<span class="estado ' + e + '">' + ESTADO_TXT[e] + '</span>';
 
-async function loadSheetData() {
-  try {
-    const table = await fetchRange(EVENTS_RANGE);
-    const rows = (table.rows || []).filter(r => r.c && cellVal(r,1)); // col B = Evento
+  function limpiar(lista) {
+    return (lista || []).map((r) => ({
+      fecha: parseFecha(r.fecha),
+      hora: String(r.hora || '').trim(),
+      evento: String(r.evento || '').trim(),
+      venue: String(r.venue || '').trim(),
+      tipo: TIPOS[norm(r.tipo)] || String(r.tipo || '').trim(),
+      estado: estadoDe(r.estado),
+      boletos: linkSeguro(r.boletos),
+    })).filter((r) => r.fecha && r.evento)
+      .sort((a, b) => a.fecha - b.fecha);
+  }
 
-    // KPIs from sheet
-    let totalIngresos = 0, totalGastos = 0;
-    let confirmedCount = 0;
+  // ── CSV publicado de Google Sheets (opcional) ──
+  function parseCSV(txt) {
+    const filas = []; let fila = [], campo = '', comillas = false;
+    for (let i = 0; i < txt.length; i++) {
+      const c = txt[i];
+      if (comillas) {
+        if (c === '"' && txt[i + 1] === '"') { campo += '"'; i++; }
+        else if (c === '"') comillas = false;
+        else campo += c;
+      } else if (c === '"') comillas = true;
+      else if (c === ',') { fila.push(campo); campo = ''; }
+      else if (c === '\n' || c === '\r') {
+        if (c === '\r' && txt[i + 1] === '\n') i++;
+        fila.push(campo); filas.push(fila); fila = []; campo = '';
+      } else campo += c;
+    }
+    if (campo || fila.length) { fila.push(campo); filas.push(fila); }
+    const cab = (filas.shift() || []).map(norm);
+    return filas.filter((f) => f.some((x) => x.trim())).map((f) => {
+      const o = {}; cab.forEach((k, i) => { o[k] = f[i]; }); return o;
+    });
+  }
 
-    const evRows = rows.map(r => {
-      const evento   = cellVal(r, 1);  // B
-      const fecha    = cellVal(r, 2);  // C
-      const venue    = cellVal(r, 3);  // D
-      const estado   = cellVal(r, 6);  // G
-      const ingresos = cellVal(r, 12); // M
-      const gastos   = cellVal(r, 13); // N
+  async function cargar() {
+    const url = String(window.LGR_SHEET_CSV || '').trim();
+    if (url) {
+      try {
+        const res = await fetch(url, { cache: 'no-store' });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const filas = limpiar(parseCSV(await res.text()));
+        if (!filas.length) throw new Error('sin filas');
+        eventos = filas; fuente = 'hoja'; avisoHoja = '';
+        return;
+      } catch (e) {
+        console.warn('Hoja publicada:', e);
+        avisoHoja = 'No se pudo leer la hoja publicada (revisa que siga publicada como CSV). Se muestra la lista de <code>eventos.js</code>.';
+      }
+    }
+    eventos = limpiar(window.LGR_EVENTOS); fuente = 'lista';
+  }
 
-      if (ingresos) totalIngresos += Number(ingresos);
-      if (gastos)   totalGastos   += Number(gastos);
-      const st = String(estado || '').toUpperCase();
-      if (st.includes('CONFIRM') || st.includes('PLANEAC')) confirmedCount++;
+  // ── render ──
+  function renderReloj() {
+    const d = new Date();
+    const fecha = d.toLocaleDateString('es-MX', { weekday: 'long', day: 'numeric', month: 'long' });
+    const corta = DIAS[d.getDay()] + ' ' + d.getDate() + ' ' + MESES_CORTOS[d.getMonth()];
+    $('reloj').innerHTML = '<span class="largo">' + esc(fecha.charAt(0).toUpperCase() + fecha.slice(1)) + ',</span>' +
+      '<span class="corto">' + esc(corta.charAt(0).toUpperCase() + corta.slice(1)) + ',</span> <b>' + hhmm(d) + '</b>';
+  }
 
-      return { evento, fecha, venue, estado, ingresos, gastos };
-    }).filter(r => r.evento);
+  function render() {
+    const futuros = eventos.filter((e) => diasHasta(e.fecha) >= 0);
+    const activos = futuros.filter((e) => e.estado !== 'cancelado');
+    const sig = activos[0];
 
-    // Render KPIs
-    document.getElementById('kpi-total').textContent = confirmedCount || AGENDA.length;
-    document.getElementById('kpi-ingresos').textContent = totalIngresos ? fmtMXN(totalIngresos) : '—';
-    document.getElementById('kpi-gastos').textContent   = totalGastos   ? fmtMXN(totalGastos)   : '—';
-    const util = totalIngresos - totalGastos;
-    const utilEl = document.getElementById('kpi-utilidad');
-    utilEl.textContent = (totalIngresos || totalGastos) ? fmtMXN(util) : '—';
-    utilEl.className = 'kpi-val ' + (util >= 0 ? 'green' : 'red');
-
-    // Next show KPI
-    document.getElementById('kpi-next').textContent = AGENDA[0].name;
-    document.getElementById('kpi-next-date').textContent = `${AGENDA[0].d} ${AGENDA[0].m} · ${AGENDA[0].hora}`;
-
-    // Render events table
-    const tbody = document.getElementById('ev-tbody');
-    if (evRows.length === 0) {
-      // Fall back to agenda
-      tbody.innerHTML = AGENDA.slice(0, 6).map(e => `
-        <tr>
-          <td><div class="ev-name">${e.name}</div><div class="ev-org">${e.org}</div></td>
-          <td class="mono">${e.d} ${e.m} 2026</td>
-          <td class="mono">${e.hora}</td>
-          <td>${e.libre ? '<span class="badge b-free">Gratuito</span>' : '<span class="badge b-conf">Confirmado</span>'}</td>
-        </tr>
-      `).join('');
+    // Próximo show
+    const cont = $('proximo-contenido');
+    $('proximo-label').textContent = sig && diasHasta(sig.fecha) === 0 ? 'Show de hoy' : 'Próximo show';
+    if (!sig) {
+      cont.innerHTML = '<p class="vacio">No hay shows cargados después de hoy. Agrégalos en <code>eventos.js</code> y aparecerán aquí.</p>';
     } else {
-      tbody.innerHTML = evRows.map(r => `
-        <tr>
-          <td><div class="ev-name">${r.evento}</div></td>
-          <td class="mono">${fmtDate(r.fecha)}</td>
-          <td>${r.venue || '—'}</td>
-          <td>${badgeHtml(r.estado)}</td>
-        </tr>
-      `).join('');
+      const n = diasHasta(sig.fecha);
+      const otrosHoy = activos.filter((e) => e !== sig && diasHasta(e.fecha) === 0);
+      const en30 = activos.filter((e) => diasHasta(e.fecha) <= 30);
+      const pend = en30.filter((e) => e.estado === 'por-confirmar').length;
+      const datos = [
+        sig.venue && '<strong>' + esc(sig.venue) + '</strong>',
+        sig.hora && '<span>' + esc(sig.hora) + '</span>',
+        sig.tipo && '<span>' + esc(sig.tipo) + '</span>',
+        pill(sig.estado),
+      ].filter(Boolean).join('');
+      cont.innerHTML =
+        '<div class="proximo-fecha" aria-label="' + esc(sig.fecha.toLocaleDateString('es-MX', { weekday: 'long', day: 'numeric', month: 'long' })) + '">' +
+          '<span class="dia-sem">' + DIAS[sig.fecha.getDay()] + '</span>' +
+          '<span>' + sig.fecha.getDate() + '</span>' +
+          '<span class="mes">' + MESES_CORTOS[sig.fecha.getMonth()] + '</span>' +
+        '</div>' +
+        '<div class="proximo-cuando">' + (n === 0 ? '<span class="en-vivo" aria-hidden="true"></span>' : '') + cuando(n) + '</div>' +
+        '<p class="proximo-nombre">' + esc(sig.evento) + '</p>' +
+        '<div class="proximo-datos">' + datos +
+          (sig.boletos ? '<a class="boton" href="' + esc(sig.boletos) + '" target="_blank" rel="noopener">Ver boletos</a>' : '') +
+        '</div>' +
+        '<p class="resumen">' +
+          (otrosHoy.length ? 'Hoy también: <strong>' + otrosHoy.map((e) => esc(e.evento)).join(', ') + '</strong>. ' : '') +
+          (en30.length === 1 ? 'Es el único show en los próximos 30 días' : '<strong>' + en30.length + ' shows</strong> en los próximos 30 días') +
+          (pend ? '; <strong>' + pend + (pend === 1 ? ' sigue' : ' siguen') + ' sin confirmar</strong>.' : ', todos confirmados.') +
+        '</p>';
     }
 
-    document.getElementById('last-updated').textContent =
-      'Datos actualizados · ' + new Date().toLocaleTimeString('es-MX', {hour:'2-digit',minute:'2-digit'});
+    // Agenda
+    $('agenda-aviso').innerHTML = avisoHoja ? '<p class="aviso">' + avisoHoja + '</p>' : '';
+    const ol = $('agenda');
+    if (!futuros.length) {
+      ol.innerHTML = '<li class="vacio">La agenda está vacía de aquí en adelante. Abre <code>eventos.js</code> en GitHub, agrega una línea por show y guarda.</li>';
+    } else {
+      let mesActual = -1, html = '';
+      futuros.forEach((e) => {
+        const clave = e.fecha.getFullYear() * 12 + e.fecha.getMonth();
+        if (clave !== mesActual) {
+          mesActual = clave;
+          const mes = MESES[e.fecha.getMonth()];
+          const anio = e.fecha.getFullYear() !== new Date().getFullYear() ? ' ' + e.fecha.getFullYear() : '';
+          html += '<li class="mes-sep">' + mes.charAt(0).toUpperCase() + mes.slice(1) + anio + '</li>';
+        }
+        const n = diasHasta(e.fecha);
+        const meta = [
+          e.venue && '<span>' + esc(e.venue) + '</span>',
+          e.hora && '<span>' + esc(e.hora) + '</span>',
+          e.tipo && '<span>' + esc(e.tipo) + '</span>',
+          e.boletos && '<a href="' + esc(e.boletos) + '" target="_blank" rel="noopener">Boletos</a>',
+        ].filter(Boolean).join('');
+        html +=
+          '<li class="ev' + (n === 0 ? ' es-hoy' : '') + (e.estado === 'cancelado' ? ' cancelado' : '') + '">' +
+            '<div class="ev-fecha"><span class="ev-dia">' + e.fecha.getDate() + '</span><span class="ev-sem">' + DIAS[e.fecha.getDay()] + '</span></div>' +
+            '<div><p class="ev-nombre">' + esc(e.evento) + '</p>' + (meta ? '<div class="ev-meta">' + meta + '</div>' : '') + '</div>' +
+            '<div class="ev-lado">' + pill(e.estado) + '<span class="ev-cuando">' + cuando(n) + '</span></div>' +
+          '</li>';
+      });
+      ol.innerHTML = html;
+    }
 
-  } catch(e) {
-    console.warn('Sheets API error:', e);
-    document.getElementById('error-banner').style.display = 'block';
-
-    // Graceful fallback — render agenda data
-    document.getElementById('kpi-total').textContent = AGENDA.length;
-    document.getElementById('kpi-next').textContent = AGENDA[0].name;
-    document.getElementById('kpi-next-date').textContent = `${AGENDA[0].d} ${AGENDA[0].m} · ${AGENDA[0].hora}`;
-    document.getElementById('kpi-ingresos').textContent = '—';
-    document.getElementById('kpi-gastos').textContent = '—';
-    document.getElementById('kpi-utilidad').textContent = '—';
-
-    const tbody = document.getElementById('ev-tbody');
-    tbody.innerHTML = AGENDA.slice(0, 8).map(e => `
-      <tr>
-        <td><div class="ev-name">${e.name}</div><div class="ev-org">${e.org}</div></td>
-        <td class="mono">${e.d} ${e.m} 2026</td>
-        <td class="mono">${e.hora}</td>
-        <td>${e.libre ? '<span class="badge b-free">Gratuito</span>' : '<span class="badge b-conf">Confirmado</span>'}</td>
-      </tr>
-    `).join('');
-
-    document.getElementById('last-updated').textContent = 'Sin conexión al Sheet';
+    $('fuente').textContent = 'Sistema v2.0. Agenda leída de ' + (fuente === 'hoja' ? 'la hoja publicada' : 'eventos.js') +
+      ' a las ' + hhmm(new Date()) + '.';
   }
-}
 
-loadSheetData();
-// Refresca cada 5 minutos
-setInterval(loadSheetData, 5 * 60 * 1000);
+  // ── buscador de accesos ──
+  function initBuscar() {
+    const input = $('buscar');
+    const grupos = Array.from(document.querySelectorAll('#accesos .grupo'));
+    const filtrar = () => {
+      const q = norm(input.value);
+      let total = 0;
+      grupos.forEach((g) => {
+        const etiqueta = norm(g.querySelector('.cinta').textContent);
+        let visibles = 0;
+        g.querySelectorAll('.links li').forEach((li) => {
+          const ok = !q || norm(li.textContent).includes(q) || etiqueta.includes(q);
+          li.hidden = !ok; if (ok) visibles++;
+        });
+        g.hidden = visibles === 0; total += visibles;
+      });
+      const sr = $('sin-resultados');
+      sr.style.display = total ? 'none' : 'block';
+      sr.textContent = total ? '' : 'Nada coincide con “' + input.value + '”. Busca por nombre de hoja o carpeta.';
+    };
+    input.addEventListener('input', filtrar);
+    input.addEventListener('keydown', (e) => { if (e.key === 'Escape') { input.value = ''; filtrar(); input.blur(); } });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === '/' && document.activeElement !== input && !/input|textarea/i.test(document.activeElement.tagName)) {
+        e.preventDefault(); input.focus();
+      }
+    });
+  }
+
+  // ── arranque ──
+  renderReloj();
+  setInterval(renderReloj, 30 * 1000);
+  initBuscar();
+  cargar().then(render);
+  setInterval(render, 5 * 60 * 1000);                                    // recalcula "hoy / mañana"
+  if (String(window.LGR_SHEET_CSV || '').trim()) setInterval(() => cargar().then(render), 10 * 60 * 1000);
+})();
 </script>
 </body>
 </html>
