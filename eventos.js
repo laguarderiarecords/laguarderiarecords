@@ -17,12 +17,15 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 window.LGR_EVENTOS = [
-  { fecha: '2026-11-20', hora: '',      evento: 'Mike Lamadrid',             venue: 'El Árbol', tipo: 'Externo',        estado: 'por confirmar', boletos: '' },
-  { fecha: '2026-11-21', hora: '',      evento: 'Licenciado Cariño',         venue: 'El Árbol', tipo: 'Externo',        estado: 'por confirmar', boletos: '' },
-  { fecha: '2026-11-22', hora: '',      evento: 'Addy Diamond',              venue: 'El Árbol', tipo: 'Externo',        estado: 'por confirmar', boletos: '' },
-  { fecha: '2026-11-27', hora: '',      evento: 'Joshi + Friends',           venue: 'El Árbol', tipo: 'Renta El Árbol', estado: 'confirmado',    boletos: 'https://www.passline.com/eventos/joshi-friends-571854' },
-  { fecha: '2026-11-28', hora: '19:00', evento: 'Axel Catalán en Querétaro', venue: 'El Árbol', tipo: 'Coproducción',   estado: 'confirmado',    boletos: '' },
-  { fecha: '2026-12-12', hora: '19:00', evento: '¿Cómo nace un disco? (recaudación para el disco de Tóttem)', venue: 'El Árbol', tipo: '', estado: 'por confirmar', boletos: '' },
+  { fecha: '2026-11-20', hora: '',            evento: 'Mike Lamadrid',             venue: 'El Árbol', tipo: 'Externo',        estado: 'por confirmar', boletos: '' },
+  { fecha: '2026-11-21', hora: '',            evento: 'Licenciado Cariño',         venue: 'El Árbol', tipo: 'Externo',        estado: 'por confirmar', boletos: '' },
+  { fecha: '2026-11-22', hora: '',            evento: 'Addy Diamond',              venue: 'El Árbol', tipo: 'Externo',        estado: 'por confirmar', boletos: '' },
+  { fecha: '2026-11-27', hora: '',            evento: 'Joshi + Friends',           venue: 'El Árbol', tipo: 'Renta El Árbol', estado: 'confirmado',    boletos: 'https://www.passline.com/eventos/joshi-friends-571854' },
+  { fecha: '2026-11-28', hora: '19:00',       evento: 'Axel Catalán en Querétaro', venue: 'El Árbol', tipo: 'Coproducción',   estado: 'confirmado',    boletos: '' },
+  { fecha: '2026-11-29', hora: '',            evento: 'Evento por confirmar',      venue: 'El Árbol', tipo: 'Externo',        estado: 'por confirmar', boletos: '' },
+  { fecha: '2026-12-05', hora: '15:00–23:00', evento: 'Ataquemos en Querétaro',    venue: 'El Árbol', tipo: 'Producción LGR', estado: 'por confirmar', boletos: '' },
+  { fecha: '2026-12-12', hora: '19:00',       evento: '¿Cómo nace un disco? (recaudación para el disco de Tóttem)', venue: 'El Árbol', tipo: '', estado: 'por confirmar', boletos: '' },
+  { fecha: '2026-12-19', hora: '15:00–23:00', evento: 'David Velasco en Querétaro', venue: 'El Árbol', tipo: 'Producción LGR', estado: 'por confirmar', boletos: '' },
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
